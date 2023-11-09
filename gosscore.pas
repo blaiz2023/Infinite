@@ -44,8 +44,8 @@ unit gosscore;
 //## Type......... System Core -> replaces 98%+ of host OS and host programming language functions and API support load
 //## Desciption... Replaces the "Blaiz Enterprises Software Platform v4.0" R&D platform of User Management
 //## Items........ 27
-//## Version...... 4.00.33380 (+2980)
-//## Date......... 25feb2023, 30dec2022, 15nov2022, 06nov2022, 11oct2022, 28sep2022, 05jul2022, 29jun2022, 14jun2022, 31may2022, 14may2022, 30apr2022, 30mar2022, 27feb2022, 08feb2022, 31jan2021, 30dec2021, 19dec2021, 30sep2021, 29aug2021, 09aug2021, 27jul2021, 07jul2021, 20jun2021, 02jun2021, 30may2021, 12may2021, 10may2021, 30apr2021, 19apr2021, 14apr2021, 03apr2021, 31mar2021, 20mar2021, 08mar2021, 26feb2021, 01feb2021, 28jan2021, 11oct2020, 25sep2020, 07sep2020, 26aug2020, 22aug2020, 28jul2020, 23may2020, 10may2020
+//## Version...... 4.00.33392 (+2990)
+//## Date......... 19may2023, 25feb2023, 30dec2022, 15nov2022, 06nov2022, 11oct2022, 28sep2022, 05jul2022, 29jun2022, 14jun2022, 31may2022, 14may2022, 30apr2022, 30mar2022, 27feb2022, 08feb2022, 31jan2021, 30dec2021, 19dec2021, 30sep2021, 29aug2021, 09aug2021, 27jul2021, 07jul2021, 20jun2021, 02jun2021, 30may2021, 12may2021, 10may2021, 30apr2021, 19apr2021, 14apr2021, 03apr2021, 31mar2021, 20mar2021, 08mar2021, 26feb2021, 01feb2021, 28jan2021, 11oct2020, 25sep2020, 07sep2020, 26aug2020, 22aug2020, 28jul2020, 23may2020, 10may2020
 //## Lines........ 102,548 [74,555 lines without multimedia support - 19feb2022]
 //## Translation.. No Support for Languages other than English
 //## Fast Timer .. Non-threaded, high-speed timer - 07jul2021 (updated more paint procs and low level system drawing procs)
@@ -53,7 +53,7 @@ unit gosscore;
 //## ==========================================================================================================================================================================================================================
 //## | Name                   | Hierarchy         | Version   | Date        | Desciption
 //## |------------------------|-------------------|-----------|-------------|--------------------------------------------------------
-//## | low level procs        | n/a               | 1.00.1600 | 11oct2022   | 27sep2022, 14may2022, 21may2020, Collection of basic procedures and functions to support platform and it's controls etc
+//## | low level procs        | n/a               | 1.00.1602 | 19may2023   | 11oct2022, 27sep2022, 14may2022, 21may2020, Collection of basic procedures and functions to support platform and it's controls etc
 //## | mis class of procs     | n/a               | 1.00.800  | 22may2022   | 26apr2022, 23may2020, Multi-image subsystem -> work with different image handlers
 //## | GIF2 suupport          | n/a               | 1.00.130  | 31dec2022   | Progressive GIF creation
 //## | tbasicprg1             | tobject           | 1.00.023  | 05mar2022   | 01jan2021, 05oct2020, Root level program outline
@@ -79,7 +79,7 @@ unit gosscore;
 //## | tbasicinfo             | tbasiccontrol     | 1.00.130  | 13apr2020   | 16mar2020, simple information list
 //## | tbasicstatus           | tbasiccontrol     | 1.00.130  | 29dec2021   | 07jul2021, 02jun2021, 05oct2020, 12apr2020, 15mar2020, simple statusbar
 //## | tbasictitle            | tbasiccontrol     | 1.00.052  | 24feb2021   | 11oct2020, Standard title -> supports both small and large modes -> exactly matches tbasictoolbar.maketitle() display output
-//## | tbasictoolbar          | tbasiccontrol     | 1.00.2150 | 26sep2022   | 28jun2022, 25mar2022, 19dec2021, 21sep2021, 07jul2021, 30may2021, 27mar2021, 21feb2021, 11oct2020, 22sep2020, 23apr2020, 29mar2020, advanced toolbar with "title + links" support
+//## | tbasictoolbar          | tbasiccontrol     | 1.00.2151 | 03nov2023   | 26sep2022, 28jun2022, 25mar2022, 19dec2021, 21sep2021, 07jul2021, 30may2021, 27mar2021, 21feb2021, 11oct2020, 22sep2020, 23apr2020, 29mar2020, advanced toolbar with "title + links" support
 //## | tbasictick             | tbasiccontrol     | 1.00.170  | 11apr2020   | 06apr2020, simple tick
 //## | tbasicedit             | tbasiccontrol     | 1.00.1101 | 19jun2022   | 03mar2022, 31mar2021, 07apr2020, advanced edit box, supports makers for edit/password/drop/dropstatic/progress -> simulates 5 controls in one with many useful features and functions
 //## | tbasicjump             | tbasiccontrol     | 1.00.066  | 06mar2022   | 21feb2022, 22mar2021, 10mar2021, realtime jumpto panel for millisecond precision position jumping for song/midi playback
@@ -2837,7 +2837,7 @@ type
    tbasicsystem=class(tobject)
    private
     //general
-    imousedownref,ihidecursorref,ipumptimer2,ibufferresize64,ibufferresize642,ilastsystem_slowref64,iecomode64,itimer1000,itimer250,ishowonceref:comp;
+    isnapshot64,imousedownref,ihidecursorref,ipumptimer2,ibufferresize64,ibufferresize642,ilastsystem_slowref64,iecomode64,itimer1000,itimer250,ishowonceref:comp;
     isizing,ilastmousemovecheckx,ilastmousemovechecky,icursorloadid,ishowaitcount,icloselocked,imustgstate,ilastdataid,iwinmax,iwinlimit,ilastsystem_mustidSLOW,ilastsystem_mustid,igstate:longint;
     ifullscreen_hidehead,ishowoptions_crosssync,iwinemaximised,imustcloseprompt,iwasdrop_showing,itimer_busy,idragging_fullwin,iclosed,iontimerbusy,iinternalpaint,ilastshowing,itiming,icreating,idestroying,imustclose,ialigning:boolean;
     inormalarea:trect;//nor only
@@ -2947,6 +2947,7 @@ type
     function getgstate:longint;
     procedure setgstate(x:longint);
     procedure __onaccept(sender:tobject;var msg:tmessage);//drag&drop files - 24APR2011, 07DEC2009
+    procedure xsnapshot_make;
     //.status support
     procedure __xstatus(xpert:double;xtitle:string;xshow,xupdatenow:boolean);
     function getstatustext(xindex:longint):string;
@@ -3065,6 +3066,8 @@ type
     function poperror(x:string):boolean;
     function poperror2(x,xclosecap:string;xlarge:boolean):boolean;
     function poperrorex(x,xclosecap:string;dw,dh,cclose:longint):boolean;
+    //.status
+    function popstatus(xmsg:string;xshowsec:longint):boolean;//03jnov2023
     //.info
     function popinfo(xtitle,x:string):boolean;
     function popinfo2(xtitle,x,xclosecap:string;xlarge:boolean):boolean;
@@ -3167,6 +3170,7 @@ type
     procedure xshowhelp;
     procedure xdefaults;
     procedure xdefaultzoom;
+    procedure xsnapshot;//03nov2023
     //core handlers
     property core[x:longint]:tbasiccontrol read getcore;
     property corecount:longint read icorecount;
@@ -6450,6 +6454,7 @@ cols_Tangy_Tangerine:array[0..83] of byte=(99,111,108,50,1,255,183,157,2,255,122
 cols_Wild_White:array[0..83] of byte=(99,111,108,50,1,255,254,253,2,229,229,217,50,253,251,252,51,223,221,222,52,143,141,142,53,143,141,142,54,133,131,132,55,223,221,222,56,173,171,172,57,213,211,212,58,203,201,202,100,250,250,238,101,220,220,208,102,140,140,128,103,140,140,128,104,130,130,118,105,220,220,208,106,170,170,158,107,210,210,198,108,200,200,188);
 cols_Wild_Thing:array[0..83] of byte=(99,111,108,50,1,0,106,118,2,70,206,218,50,122,221,122,51,92,191,92,52,12,111,12,53,12,111,12,54,2,101,2,55,152,251,152,56,42,141,42,57,82,181,82,58,72,171,72,100,255,192,0,101,225,162,0,102,145,82,10,103,145,82,10,104,135,72,0,105,225,162,0,106,175,112,0,107,215,152,0,108,205,142,0);
 cols_black:array[0..83] of byte=(99,111,108,50,1,0,0,0,2,27,27,27,50,27,27,27,51,0,0,0,52,157,157,157,53,157,157,157,54,147,147,147,55,57,57,57,56,107,107,107,57,0,0,0,58,0,0,0,100,27,27,27,101,0,0,0,102,157,157,157,103,157,157,157,104,147,147,147,105,57,57,57,106,107,107,107,107,0,0,0,108,0,0,0);
+cols_black3:array[0..83] of byte=(99,111,108,50,1,0,0,0,2,27,27,27,50,27,27,27,51,0,0,0,52,52,119,156,53,52,119,156,54,147,147,147,55,57,57,57,56,107,107,107,57,0,0,0,58,0,0,0,100,27,27,27,101,0,0,0,102,52,119,156,103,52,119,156,104,147,147,147,105,57,57,57,106,107,107,107,107,0,0,0,108,0,0,0);
 cols_blue:array[0..83] of byte=(99,111,108,50,1,17,64,175,2,77,124,235,50,166,192,255,51,136,162,225,52,56,82,145,53,56,82,145,54,46,72,135,55,136,162,225,56,86,112,175,57,126,152,215,58,116,142,205,100,97,144,255,101,67,114,225,102,10,34,145,103,10,34,145,104,0,24,135,105,67,114,225,106,17,64,175,107,57,104,215,108,47,94,205);
 cols_royal_blue:array[0..83] of byte=(99,111,108,50,1,8,0,180,2,69,105,255,50,110,138,255,51,80,108,225,52,10,28,145,53,10,28,145,54,0,18,135,55,80,108,225,56,30,58,175,57,70,98,215,58,60,88,205,100,69,105,255,101,39,75,225,102,10,10,145,103,10,10,145,104,0,0,135,105,39,75,225,106,0,25,175,107,29,65,215,108,19,55,205);
 cols_pink:array[0..83] of byte=(99,111,108,50,1,209,129,196,2,255,186,244,50,255,223,252,51,224,196,221,52,255,179,243,53,255,179,243,54,122,86,117,55,255,179,243,56,186,162,177,57,255,222,243,58,186,162,177,100,255,223,252,101,224,196,221,102,0,0,0,103,255,158,240,104,122,86,117,105,123,79,147,106,185,166,183,107,255,222,243,108,0,33,12);
@@ -7156,14 +7161,15 @@ procedure low__resetmovetime;
 procedure low__resetdowntime;
 procedure low__resetwheeltime;
 //.universial object destructor
-procedure low__showhelp(dshow:boolean);
+function freeobj(x:pobject):boolean;//02feb2021, 05DEC2011, 14JAN2011, 15OCT2004
+//.other
+function stableobj(x:tobject):boolean;//07mar2021
+procedure low__showhelp(dshow:boolean);//03nov2023
 procedure low__createlink(df,sf,dswitches,iconfilename:string);//10apr2019, 14NOV2010
 procedure runLOW(fDOC,fPARMS:string);//stress tested on Win98/WinXP - 27NOV2011, 06JAN2011, low__run(   \\showfile \\runfile
 function low__vol(var xfilename:string):boolean;//check once only - 10OCT2010
 function low__canshowvol:boolean;//07mar2022
 procedure low__showvol;
-function stableobj(x:tobject):boolean;//07mar2021
-function freeobj(x:pobject):boolean;//02feb2021, 05DEC2011, 14JAN2011, 15OCT2004
 //.64bit timing
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 function ms64FAST:comp;//64bit millisecond system timer, 01-SEP-2006
@@ -12692,7 +12698,7 @@ else if (strcopy1(n,1,1)='?') then
          goto redo;
          end
       else if (sizeof(cols__default)>=2) then aset(cols__default,'')
-      else                                    aset(cols_black,'')//15mar2022 - was: glowing_grey)//10mar2021
+      else                                    aset(cols_black3,'')//103nov20223, 5mar2022 - was: glowing_grey)//10mar2021
       end
    //.newer built-in colors - 22jul2021
    else aset([0],low__findbuiltincolor(n,false,xadjBrightness100));//brightness MUST be handled by "aset()"
@@ -12934,6 +12940,8 @@ else if m('?Wild Thing 3')       then aset2(cols_Wild_Thing,20)//31may2021
 else if m('?Wild Thing 4')       then aset2(cols_Wild_Thing,40)//31may2021
 else if m('?Black')              then aset(cols_Black)//26aug2021
 else if m('?Black 2')            then aset2(cols_Black,20)//26aug2021
+else if m('?Black 3')            then aset(cols_Black3)//03nov2023
+else if m('?Black 4')            then aset2(cols_Black3,20)//03nov2023
 else if m('?White')              then aset(cols_White)//26aug2021
 else if m('?White 2')            then aset2(cols_White,10)//26aug2021
 else if m('?Wild Mix')           then aset(cols_Wild_Mix)//26aug2021
@@ -12985,7 +12993,7 @@ else if m('?brown 9')            then aset2(cols_brown6,30)//21jun2022
 
 else
    begin
-   if (sizeof(cols__default)>=2) then aset(cols__default) else aset(cols_black);
+   if (sizeof(cols__default)>=2) then aset(cols__default) else aset(cols_black3);//03nov2023
    end;
 except;end;
 end;
@@ -13066,7 +13074,7 @@ end;
 //## low__ver ##
 function low__ver:longint;//low__gossver, low__sysver etc//low__ver
 begin
-try;result:=40033380;except;end;
+try;result:=40033392;except;end;
 end;
 //## low__verstr ##
 function low__verstr:string;//low__sysver etc//low__ver
@@ -17950,7 +17958,7 @@ try;bfree(x);except;end;//28jan2021
 end;
 {}//!!!!
 //## low__showhelp ##
-procedure low__showhelp(dshow:boolean);
+procedure low__showhelp(dshow:boolean);//03nov2023
 var
    a:tbasicprg2;
    dx,dy,dw,dh:longint;
@@ -17973,6 +17981,9 @@ if zznil(programhelpviewer,2040) then
 programhelpviewer.center;
 programhelpviewer.show;
 {}
+
+//filter
+if (sizeof(programhelp)<2) then dshow:=false;
 
 //now:
 if (system_program<>nil) and (system_program is tbasicprg2) then
@@ -37975,14 +37986,14 @@ if xok or (xms>=3600) then
    y:=low__div64(xms,3600);
    xms:=low__sub64(xms,low__mult64(y,3600));
    xok:=true;
-   v:=v+intstr64(y)+'h ';
+   v:=v+low__insstr('0',(y<=9) and (v<>''))+intstr64(y)+'h ';//19may20223
    end;
 if xok or (xms>=60) then
    begin
    y:=low__div64(xms,60);
    xms:=low__sub64(xms,low__mult64(y,60));
    xok:=true;
-   v:=v+intstr64(y)+'m ';
+   v:=v+low__insstr('0',(y<=9) and (v<>''))+intstr64(y)+'m ';//19may20223
    end;
 v:=v+intstr64(xms)+'s';
 //set
@@ -75966,6 +75977,7 @@ ibufferresize64       :=ms64;
 ibufferresize642      :=ms64;
 itimer250             :=ms64;
 itimer1000            :=ms64;
+isnapshot64           :=0;//off - 03nov2023
 ihost.width           :=frcrange(round(dwidth*vizoom*(low__aorb(100,120,vitouch)/100)),10,misworkw);
 ihost.height          :=frcrange(round(dheight*vizoom*(low__aorb(100,120,vitouch)/100)),10,misworkh);
 //.sync width & height immedately -> so remaining procs are sure to have proper dimensions - 11may2021
@@ -76467,6 +76479,27 @@ if zzok(isplash,7099) then exit;
 isplash:=tbasicsplash.create(self);
 isplash.xabout;
 except;end;
+end;
+//## xsnapshot ##
+procedure tbasicsystem.xsnapshot;
+begin
+try;isnapshot64:=ms64+500;except;end;
+end;
+//## xsnapshot_make ##
+procedure tbasicsystem.xsnapshot_make;
+var
+   d:tbasicimage;
+   dw,dh:longint;
+begin
+try
+dw:=width;
+dh:=height;
+d:=misimg24(dw,dh);
+miscopyareaxx1(0,0,dw,dh,rect(0,0,dw-1,dh-1),d,ibuffer);
+low__copyimg(d,0);
+popstatus('Snapshot copied to Clipboard',0);
+except;end;
+try;freeobj(@d);except;end;
 end;
 //## xshowoptions ##
 procedure tbasicsystem.xshowoptions;
@@ -77090,6 +77123,8 @@ xadd3('Wild Thing 3');
 xadd3('Wild Thing 4');
 xadd3('Black');
 xadd3('Black 2');
+xadd3('Black 3');//03nov2023
+xadd3('Black 4');//03nov2023
 xadd3('White');
 xadd3('White 2');
 xadd3('Blue');
@@ -80085,6 +80120,13 @@ if ishowoptions_crosssync and (not visyncing) and (not vimustsync) then
    xshowoptions_crosssync;
    end;
 
+//isnapshot64
+if (isnapshot64<>0) and (ms64>=isnapshot64) then
+   begin
+   isnapshot64:=0;
+   xsnapshot_make;
+   end;
+
 leakhunt(-1,'sys.xtimer');
 except;end;
 end;
@@ -81127,6 +81169,43 @@ cadd(low__udv(xclosecap,ntranslate('Close')),tepYes20,1,scdlg,rthtranslate('Clos
 end;
 //set
 result:=xshowwait(a,xpreviouscontrol,xpreviousfocus);
+except;end;
+try;freeobj(@a);except;end;
+end;
+//## popstatus ##
+function tbasicsystem.popstatus(xmsg:string;xshowsec:longint):boolean;//03jnov2023
+var
+   a:tbasicscroll;
+   da:trect;
+   dw,dh,xpreviousfocus:longint;
+   xpreviouscontrol:tbasiccontrol;
+   xref:comp;
+begin
+try
+//defaults
+result:=false;
+xpreviousfocus:=winfocus;
+xpreviouscontrol:=focuscontrol;
+a:=nil;
+//init
+if (xshowsec=0) then xshowsec:=2;
+xshowsec:=frcmin(xshowsec,1)*1000;
+dw:=300;
+dh:=0;
+low__winzoom2(dw,dh,50,50);//17mar2021
+da.left:=(width-dw) div 2;
+da.top:=(height-dh) div 2;
+da.right:=da.left+dw-1;
+da.bottom:=da.top+dh-1;
+//get
+a:=ndlg(da,false);
+a.ominheight:=0;
+a.oborderstyle:=bsSystem20;
+a.static:=true;
+a.xhelp.showhelp:=false;
+a.nlabel(xmsg,'');
+//set
+result:=xshowwait2(a,xpreviouscontrol,xpreviousfocus,xshowsec);
 except;end;
 try;freeobj(@a);except;end;
 end;
@@ -86517,12 +86596,13 @@ low__menuitem2(xmenudata,tepBE20,protect_text(16771815,'Portal - www.BlaizEnterp
 //was: low__menuitem2(m,tepBE20,'Twitter','Visit Blaiz Enterprises on Twitter','twitter',100,aknone,true);
 
 low__menutitle(xmenudata,tepnone,'Settings and Information','');
+low__menuitem2(xmenudata,tepCopy20,'Snapshot','Take a snapshot of program and copy to Clipboard','snapshot.program',100,aknone,true);
 low__menuitem2(xmenudata,tep__yes(viOntop),protect_text(16770953,'On Top'),'Toggle On Top','toggle.ontop',100,aknone,true);
 low__menuitem2(xmenudata,tep__yes(viTouch),protect_text(16771309,'Touch'),'Toggle Touch','toggle.touch',100,aknone,true);
 low__menuitem2(xmenudata,tepOptions20,protect_text(16770856,'Options'),'Show Options window','options',100,aknone,true);
 if mm_ok or mid_ok or wav_ok then low__menuitem2(xmenudata,tepVol20,'Mixer','Show Mixer','mixer',100,aknone,low__canshowvol);
 
-low__menuitem2(xmenudata,tepHelp20,protect_text(16771312,'Help'),'Show / Hide Built-in Help','help',100,aknone,true);//24jul2021
+if (sizeof(programhelp)>=2) then low__menuitem2(xmenudata,tepHelp20,protect_text(16771312,'Help'),'Show / Hide Built-in Help','help',100,aknone,true);//24jul2021
 low__menuitem2(xmenudata,tepAbout20,protect_text(16770837,'About'),'Show About window','about',100,aknone,true);
 low__menuitem2(xmenudata,tepRefresh20,protect_text(16771388,'Restore Default Zoom...'),'Restore default zoom','defaultzoom',100,aknone,vizoom__root<>0);
 low__menuitem2(xmenudata,tepRefresh20,protect_text(16771396,'Restore Defaults...'),'Restore default settings','defaults',100,aknone,true);
@@ -86572,6 +86652,7 @@ else if (xcode2='toggle.touch') then//27mar2022
    syssettings.b['touch']:=not syssettings.b['touch'];
    viSyncandsave;
    end
+else if (xcode2='snapshot.program') then gui.xsnapshot//03nov2023
 else if (xcode2='options') then gui.xshowoptions
 else if (xcode2='mixer') then low__showvol//06nov2022
 else if (xcode2='help') then gui.xshowhelp
@@ -95686,7 +95767,7 @@ end;
 //## xaddhelp ##
 procedure tbasictoolbar.xaddhelp;
 begin
-try;add('Help',tephelp20,0,scHelp,'Show / Hide Built-in Help');except;end;//24jul2021
+try;if (sizeof(programhelp)>=2) then add('Help',tephelp20,0,scHelp,'Show / Hide Built-in Help');except;end;//03nov2023, 24jul2021
 end;
 //## xaddabout ##
 procedure tbasictoolbar.xaddabout;

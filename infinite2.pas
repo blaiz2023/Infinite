@@ -3,7 +3,7 @@ unit infinite2;
 //## Name......... Infinite
 //## Type......... User Program
 //## Desciption... Writing management system
-//## Version...... 1.00.830
+//## Version...... 1.00.850
 //## Date......... 02may2023
 //## Lines........ 2,253
 //## Copyright.... (c) 1997-2023 Blaiz Enterprises and www.BlaizEnterprises.com
@@ -22,6 +22,9 @@ uses
    FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.surfaces,
    system.dateutils, gosscore, gossdat;
 {$endif}
+
+var
+   sysrecent_txt:boolean=false;
 
 type
 {tdoceditor}
@@ -130,7 +133,7 @@ type
     idoclist:array[0..9] of tdoceditor;
     icols,icols2:tbasiccols;
     ishownav,iautoview,ibuildingcontrol,iloaded,ibackup,ishowlog:boolean;
-    iwritingtime,iwritingwords,iwritingwordsREF,istatusref64,iinfotimer,itimer100,itimer250,itimer500,itimerslow:comp;
+    iwritingtime,iwritingwords,iwritingwordsREF,iwritingtime2,istatusref64,iinfotimer,itimer100,itimer250,itimer500,itimerslow:comp;
     ibackupfolder,iwritingwordsREF2:string;
     //.log support
     ilognamelist:array[0..199] of string;
@@ -456,6 +459,8 @@ low__menutitle(xmenudata,tepnone,'New Document','Select document format');
 low__menuitem2(xmenudata,tepTXT20,'Text Document','TXT document','new.txt',100,aknone,xok);
 low__menuitem2(xmenudata,tepBWD20,'Enhanced Text Document','BWD document','new.bwd',100,aknone,xok);
 low__menuitem2(xmenudata,tepBWP20,'Advanced Text Document','BWP document','new.bwp',100,aknone,xok);
+low__menusep(xmenudata);
+low__menuitem2(xmenudata,tep__yes(sysrecent_txt),'Automatically maintain ".__recent.txt/html"','Ticked: Stores contents of recently saved document (from cursor line onwards) to ".__recent.txt/html" files.','toggle.recent',100,aknone,true);
 //.options
 xok:=(xnavfile<>'');
 low__menutitle(xmenudata,tepnone,'Options','Display options');
@@ -519,6 +524,7 @@ else if low__comparetext(strcopy1(xcode2,1,4),'new.') then
          end;
       end;
    end
+else if (xcode2='toggle.recent') then low__toggle(sysrecent_txt)
 else if (xcode2='toggle.main') then low__toggle(sysdic_main_use)
 else if (xcode2='toggle.sup1') then low__toggle(sysdic_sup1_use)
 else if (xcode2='toggle.sup2') then low__toggle(sysdic_sup2_use)
@@ -883,9 +889,9 @@ end;
 //## xsync2 ##
 procedure tdoceditor.xsync2(xinfo_mustload,xinfo_mustsave,xdata_mustload,xdata_mustsave:boolean);
 var
-   str2,str1,xnavext,xext,anavfolder,xnavfilename,xfilename,e:string;
+   tmpstr,tmpstr2,str2,str1,xnavext,xext,anavfolder,xnavfilename,xfilename,e:string;
    xstatus_loadeddata,bol1,xmustpaint,xmustdata,xmustinfo,xsplit,xrows:boolean;
-   int1,p,xpos,xpos2,xscrollv_px,xscrollh:longint;
+   int2,int1,p,xpos,xpos2,xscrollv_px,xscrollh:longint;
    xstyle,sbits,sw,sh,scellcount,scellw,scellh,sdelay:longint;
    shasai,stransparent:boolean;
    xvars:tvars8;
@@ -931,6 +937,14 @@ var
    3..4:result:=2;
    else result:=1;
    end;//case
+   end;
+   //## xsentencesep ##
+   function xsentencesep(x:longint):boolean;
+   var
+      v:byte;
+   begin
+   v:=low__wordcore_docchar(itext.core^,x);
+   result:=(v=ssDot) or (v=ssexclaim) or (v=ssquestion) or (v=ss10);
    end;
 begin
 try
@@ -1074,6 +1088,68 @@ if (xfilename<>'') and (xmustdata or xdata_mustsave) and itext.visible and cansa
       itext.ioget(xdata,'txt');
       bol1:=low__tofile(xfilename,xdata,e);
       end;
+   //.plain text version for TTS reading - 07aug20223
+   if sysrecent_txt then
+      begin
+      tmpstr:=low__extractfilepath(xfilename)+'.__recent.txt';
+      tmpstr2:=low__extractfilepath(xfilename)+'.__recent.html';
+      if (not low__comparetext(tmpstr,xfilename)) and (not low__comparetext(tmpstr2,xfilename)) then
+         begin
+         //init
+         xdata.clear;
+         //recent - txt/html
+         //.remove preceeding text
+         int1:=itext.cpos-1;
+         if (int1>=1) then
+            begin
+            if xsentencesep(int1) then dec(int1);
+            if (int1>=1) then
+               begin
+               for p:=int1 downto 0 do if xsentencesep(p) or (p=0) then
+                  begin
+                  if xsentencesep(p) then int1:=p+1 else int1:=p;
+                  break;
+                  end;
+               end;
+            end;
+         //.get text from start of current line onwards
+         xdata.clear;
+         low__wordcore4(itext.core^,'ioget',bcopystr1('txt '+inttostr(1+int1)+' '+inttostr(blen(itext.core.data)),1,maxint),xdata,str2,e);
+         //.txt
+         low__tofile(tmpstr,xdata,e);
+         //.html - top and bottom html wrapper
+         xneedtmp;
+         xtmp.sadd(
+         '<html>'+rcode+
+         '<head>'+rcode+
+         '</head>'+rcode+
+         '<style type="text/css">'+rcode+
+         'html {height:100%;scroll-padding-top:0px;word-wrap:break-word;word-wrap:anywhere;}'+rcode+
+         'pre {max-width:1000px;margin:0px;margin-left:auto;margin-right:auto;overflow-x:auto;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word;}'+rcode+
+         '.snav {display:block;position:-webkit-sticky;position:sticky;top:-1px;z-index:50;opacity:1.0;}'+rcode+
+         '.toff {font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";'+'background-color:transparent;color:black;text-decoration:none;padding:5px;transition:transform .25s;text-shadow:0px 1px 18px rgba(179,142,87,0.6);}'+rcode+
+         '.toff:link    {font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";'+'background-color:transparent;color:black;text-decoration:none;text-shadow:0px 1px 18px rgba(179,142,87,0.6);}'+rcode+
+         '.toff:hover   {font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";'+'background-color:transparent;border-bottom:black solid 2px;color:black;text-decoration:none;text-shadow:0px 1px 18px rgba(0,0,0,0.6);}'+rcode+
+         '.toff:visited {font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";'+'background-color:transparent;text-shadow:0px 1px 18px rgba(179,142,87,0.6);}'+rcode+
+         '</style>'+rcode+
+         '<body>'+rcode+
+         '<div class="snav" style="align-content:center;text-align:center;width:fit-content;margin:0px;margin-left:auto;margin-right:10px;padding:0px;border:0px;border-radius:20px;color:black;'+'background-color:#9effff;background-image:linear-gradient(0deg,rgba(0,0,0,.2),10%,rgba(0,0,0,0),90%,rgba(0,0,0,.2));">'+rcode+
+         '<div style="display:block;align-content:center;text-align:center;max-width:1020px;padding:0px 10px 2px 10px;margin:0px;margin-left:auto;margin-right:0px;">'+rcode+
+         '<a class="toff" href="#top">Top</a>'+rcode+
+         '</div>'+rcode+
+         '</div>'+rcode+
+         '<pre>'+rcode+
+         '<a name="top">&nbsp;</a>'+rcode);
+         xdata.ins(xtmp,0);
+         xdata.sadd(
+         '</pre>'+rcode+
+         '</head>'+rcode+
+         '</html>'+rcode);
+         //.write the file
+         low__tofile(tmpstr2,xdata,e);
+         end;
+      end;
+
    //.update revert data
    itext.revertinit(xdata,true);//19dec2021
    //.other
@@ -1307,9 +1383,11 @@ istatusref64:=ms64;
 isettingsref:='';
 isettingsref2:='';
 iwritingtime:=0;
+iwritingtime2:=0;
 iwritingwords:=0;
 iwritingwordsREF:=0;
 iwritingwordsREF2:='';
+
 //vars
 iloaded:=false;
 ishowlog:=true;
@@ -1400,7 +1478,7 @@ rootwin.xstatus2.cellwidth[4]:=80;
 rootwin.xstatus2.cellwidth[5]:=80;
 rootwin.xstatus2.cellwidth[6]:=130;
 rootwin.xstatus2.cellwidth[7]:=90;
-rootwin.xstatus2.cellwidth[8]:=130;
+rootwin.xstatus2.cellwidth[8]:=180;
 rootwin.xstatus2.cellwidth[9]:=90;
 
 
@@ -1656,12 +1734,14 @@ a:=vnew2(950);
 a.b['max']  :=prgsettings.bdef('max',false);
 a.s['backupfolder']:=prgsettings.sdef('backupfolder','');
 a.c['writingtime']:=prgsettings.idef64('writingtime',0);
+a.c['writingtime2']:=prgsettings.idef64('writingtime2',0);
 a.c['writingwords']:=prgsettings.idef64('writingwords',0);
 a.b['showlog']  :=prgsettings.bdef('showlog',true);
 a.i['docindex'] :=prgsettings.idef2('docindex',0,0,high(idoclist));
 a.b['autoview'] :=prgsettings.bdef('autoview',true);
 a.b['shownav'] :=prgsettings.bdef('shownav',true);
 a.b['backup'] :=prgsettings.bdef('backup',true);
+a.b['recent.use'] :=prgsettings.bdef('recent.use',false);//07aug20223
 a.b['main.use'] :=prgsettings.bdef('main.use',true);
 a.b['sup1.use'] :=prgsettings.bdef('sup1.use',true);
 a.b['sup2.use'] :=prgsettings.bdef('sup2.use',true);
@@ -1673,6 +1753,7 @@ prgsettings.data:=a.data;
 //.writing
 xwritingreset;
 iwritingtime:=a.c['writingtime'];
+iwritingtime2:=a.c['writingtime2'];
 iwritingwords:=a.c['writingwords'];
 //.other
 ibackupfolder:=low__readportablefilename(a.s['backupfolder']);
@@ -1682,6 +1763,7 @@ ibackup:=a.b['backup'];
 iautoview:=a.b['autoview'];
 ishownav:=a.b['shownav'];
 xshowpage(idocindex);
+sysrecent_txt:=a.b['recent.use'];//07aug20223
 sysdic_main_use:=a.b['main.use'];
 sysdic_sup1_use:=a.b['sup1.use'];
 sysdic_sup2_use:=a.b['sup2.use'];
@@ -1709,12 +1791,14 @@ a:=vnew2(951);
 //get
 a.b['max']:=gui.maxscreen;
 a.c['writingtime']:=iwritingtime;
+a.c['writingtime2']:=iwritingtime2;
 a.c['writingwords']:=iwritingwords;
 a.b['showlog']:=ishowlog;
 a.i['docindex']:=xdocindex;
 a.b['autoview']:=iautoview;
 a.b['shownav']:=ishownav;
 a.b['backup']:=ibackup;
+a.b['recent.use']:=sysrecent_txt;//07aug20223
 a.b['main.use']:=sysdic_main_use;
 a.b['sup1.use']:=sysdic_sup1_use;
 a.b['sup2.use']:=sysdic_sup2_use;
@@ -1739,8 +1823,8 @@ if not iloaded then exit;
 //get
 bol1:=false;
 for p:=0 to high(idoclist) do if idoclist[p].xmustsavesettings then bol1:=true;
-if low__setstr(isettingsref,bnc(gui.maxscreen)+bnc(ishownav)+bnc(iautoview)+bnc(ibackup)+bnc(ishowlog)+'|'+inttostr(xdocindex)+'|'+bnc(sysdic_main_use)+bnc(sysdic_sup1_use)+bnc(sysdic_sup2_use)+#7+ibackupfolder+#7+sysfind_text) then bol1:=true;
-if xfull and low__setstr(isettingsref2,low__64(iwritingtime)+'|'+low__64(iwritingwords)) then bol1:=true;
+if low__setstr(isettingsref,bnc(gui.maxscreen)+bnc(ishownav)+bnc(iautoview)+bnc(ibackup)+bnc(ishowlog)+'|'+inttostr(xdocindex)+'|'+bnc(sysrecent_txt)+bnc(sysdic_main_use)+bnc(sysdic_sup1_use)+bnc(sysdic_sup2_use)+#7+ibackupfolder+#7+sysfind_text) then bol1:=true;
+if xfull and low__setstr(isettingsref2,low__64(iwritingtime)+'|'+low__64(iwritingtime2)+'|'+low__64(iwritingwords)) then bol1:=true;
 //set
 if bol1 then xsavesettings;
 except;end;
@@ -1750,6 +1834,7 @@ procedure tprogram.xwritingreset;
 begin
 try
 iwritingtime:=0;
+iwritingtime2:=0;
 iwritingwords:=0;
 iwritingwordsREF:=0;
 iwritingwordsREF2:='';
@@ -1986,11 +2071,17 @@ if (ms64>=itimer100) and iloaded then
       //..incremental choke -> too much and it's probably a paste or undo/redo action -> ignore it
       if (cmp1>=1) and (cmp1<=50) then iwritingwords:=low__add64(iwritingwords,cmp1);
       end;
+   //.time2
+   if (low__keyidle<300000) then//5 minutes
+      begin
+      //.time
+      iwritingtime2:=low__add64(iwritingtime2,100);
+      end;
    //reset
    itimer100:=ms64+100;
    end;
 
-   
+
 //timer250
 if (ms64>=itimer250) then
    begin
@@ -2046,7 +2137,7 @@ var
    x:tdoceditor;
    str1,str2:string;
    xtextOK,xshownav,xhavefile:boolean;
-   cmp1:comp;
+   cmp1,cmp2:comp;
 begin
 try
 //check
@@ -2141,10 +2232,10 @@ rootwin.xstatus2.cellname[7]:='time.reset';
 
 //.rate
 cmp1:=low__div64(low__mult64(3600,iwritingwords),low__div64(iwritingtime,1000));
-rootwin.xstatus2.celltext[8]:='Rate: '+low__64(cmp1)+'w /hr';
+cmp2:=low__div64(low__mult64(3600,iwritingwords),low__div64(iwritingtime2,1000));
+rootwin.xstatus2.celltext[8]:='Rate: '+low__64(cmp2)+' - '+low__64(cmp1)+'w /hr';
 rootwin.xstatus2.cellname[8]:='time.reset';
 rootwin.xstatus2.cellpert[8]:=low__percentage64(cmp1,5000);//0..100% -> 0..5,000 w/hr
-
 
 rootwin.xstatus2.celltext[9]:='Backup: '+low__aorbstr('Off','On'+low__insstr(' / '+low__64(systrack_backupcount)+' made',systrack_backupcount>=1),ibackup);
 rootwin.xstatus2.cellname[9]:='backup.toggle';

@@ -25,14 +25,14 @@ const
    programwebname='Infinite';
    programwebname_check=16771215;
 
-   programversion='1.00.830';
+   programversion='1.00.850';
    programversion_check=16771433;
 
    programnewinstance=1;
    programnewinstance_check=16770816;
 
-   programslogan='Infinite by BlaizEnterprises.com';
-   programslogan_check=16771831;
+   programslogan='Infinite by Blaiz Enterprises';
+   programslogan_check=16771476;
 
    //.desktop paid status
    programpaid=0;//0=free, 1..N=paid - also works inconjunction with "system_storeapp" and it's cost value to determine PAID status is used within help etc - 30mar2022
