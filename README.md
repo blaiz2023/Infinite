@@ -1,7 +1,7 @@
 # Infinite
 Type with ease and worry free with this tabbed text editor. Supports plain text (txt) documents and custom text (bwd/bwp) formats for basic text styling and image support (bwp).  With a built-in spell checker, multiple word wrap modes and hassle free manuscript mode, combined with an extensive backup system that ensures you'll never lose any work again, no matter what happens, writing has never been smoother.  Plus work on multiple documents at once and easily switch between them fast.
 
-<img src="images/infinite-screenshot.jpg">
+<img src="images/infinite-screenshot.png">
 
 # Features
 * Plain text documents (TXT)
