@@ -1,7 +1,9 @@
 # Infinite
-Simple to use multi-tab text editor with undo/redo support + english dictionary
+Type with ease and worry free with this tabbed text editor. Supports plain text (txt) documents and custom text (bwd/bwp) formats for basic text styling and image support (bwp).  With a built-in spell checker, multiple word wrap modes and hassle free manuscript mode, combined with an extensive backup system that ensures you'll never lose any work again, no matter what happens, writing has never been smoother.  Plus work on multiple documents at once and easily switch between them fast.
 
-Features
+<img src="images/infinite-screenshot.jpg">
+
+# Features
 * Plain text documents (TXT)
 * Enhanced Text documents (BWD) - text and styling (bold, italic etc)
 * Advanced Text documents (BWP) - text, styling, alignment and image support
@@ -21,4 +23,17 @@ Features
 * Edit main dictionary and supplementary dictionaries 1 and 2
 * Does not support unicode - ascii text only
 
-![Infinite Screen Shot](infinite-screenshot.jpg?raw=true)
+# Download
+<a href="src/infinite.exe">infinite.exe</a> - windows all
+
+# Images
+<img src="images/infinite-screenshot2.jpg">
+
+<img src="images/infinite-screenshot3.jpg">
+
+<img src="images/infinite-screenshot4.jpg">
+
+
+
+
+
