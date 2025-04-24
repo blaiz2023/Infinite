@@ -27,11 +27,11 @@ Type with ease and worry free with this tabbed text editor. Supports plain text 
 <a href="src/infinite.exe">infinite.exe</a> - windows all
 
 # Images
-<img src="images/infinite-screenshot2.jpg">
+<img src="images/infinite-screenshot2.png">
 
-<img src="images/infinite-screenshot3.jpg">
+<img src="images/infinite-screenshot3.png">
 
-<img src="images/infinite-screenshot4.jpg">
+<img src="images/infinite-screenshot4.png">
 
 
 
