@@ -24,7 +24,7 @@ Type with ease and worry free with this tabbed text editor. Supports plain text 
 * Does not support unicode - ascii text only
 
 # Download
-<a href="src/infinite.exe">infinite.exe</a> - windows all
+Download <a href="src/infinite.exe">infinite.exe</a> or from the "<a href="bin/">bin</a>" or "<a href="src/">src</a>" folders above.
 
 # Images
 <img src="images/infinite-screenshot2.png">
